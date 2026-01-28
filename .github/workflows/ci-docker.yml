@@ -28,9 +28,13 @@ jobs:
       - name: Build Docker image
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        run: docker build -t "$DOCKER_USERNAME/employee-management:1.0" .
+        run: |
+          CleanUsername=$(echo "$DOCKER_USERNAME" | tr -d '\n' | tr -d '\r' | xargs)
+          docker build -t "$CleanUsername/employee-management:1.0" .
 
       - name: Push Docker image
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        run: docker push "$DOCKER_USERNAME/employee-management:1.0"
+        run: |
+          CleanUsername=$(echo "$DOCKER_USERNAME" | tr -d '\n' | tr -d '\r' | xargs)
+          docker push "$CleanUsername/employee-management:1.0"
